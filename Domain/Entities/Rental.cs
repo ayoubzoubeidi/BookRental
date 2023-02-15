@@ -10,17 +10,11 @@ public class Rental : BaseAuditableEntity
 {
     public Guid CustomerId { get; set; }
     public Guid BookCopyId { get; set; }
+    public DateTime RentDate { get; set; }
+
     public BookCopy BookCopy { get; set; }
     public Customer Customer { get; set; }
-    public DateTime RentDate { get; set; }
-    public DateTime ExpectedReturnDate
-    {
-        get
-        {
-            return RentDate = RentDate.AddDays(15);
-        }
-        private set { RentDate = RentDate.AddDays(15); }
-    }
+    public DateTime ExpectedReturnDate { get; set; }
     public DateTime? ActualReturnDate { get; set; }
     public bool IsReturned() => ActualReturnDate != null;
 

@@ -2,6 +2,7 @@
 using Application.Customers.Queries.GetCustomerDetail;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,15 +18,21 @@ public class Handler : IRequestHandler<GetCustomersListQuery, CustomerPage>
 {
 
     private readonly IBookRentalDbContext _context;
+    private readonly ILogger _logger;
 
-    public Handler(IBookRentalDbContext context)
+    public Handler(IBookRentalDbContext context, ILogger logger)
     {
         _context = context;
+        _logger = logger;
     }
 
     public async Task<CustomerPage> Handle(GetCustomersListQuery request, CancellationToken cancellationToken)
     {
-        return new CustomerPage(await _context.CustomerAggregateRoot.AsNoTracking().Skip(request.PageNumber * request.PageSize)
+        _logger.Information("Getting All The {Type}", "Customers");
+        return new CustomerPage(await _context.CustomerAggregateRoot
+            .AsNoTracking()
+            .OrderBy(x => x.Id)
+            .Skip(request.PageNumber * request.PageSize)
             .Select(c => (CustomerDetailVue)c).ToListAsync());
     }
 }

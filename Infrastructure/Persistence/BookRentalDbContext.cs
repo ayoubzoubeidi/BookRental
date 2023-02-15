@@ -4,6 +4,7 @@ using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ public class BookRentalDbContext : DbContext, IBookRentalDbContext
     public DbSet<Author> Authors { get; set; }
     public DbSet<BookCopy> BookCopies { get; set; }
     public DbSet<Rental> Rentals { get; set; }
-    
+
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         foreach (var entry in ChangeTracker.Entries<BaseAuditableEntity>())

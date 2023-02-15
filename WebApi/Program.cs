@@ -2,6 +2,7 @@ using Application;
 using Application.Common;
 using Domain.Entities;
 using Infrastructure;
+using Serilog;
 using WebApi.Common;
 
 namespace WebApi;
@@ -19,6 +20,10 @@ public class Program
                         .AddEnvironmentVariables()
                         .Build();
 
+        builder.Logging.ClearProviders();
+        Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
+        builder.Services.AddSingleton(Log.Logger);
+        builder.Host.UseSerilog();
 
         // Add services to the container.
 
@@ -26,6 +31,7 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddHealthChecks();
         builder.Services.AddPersistence(configuration);
         builder.Services.AddApplication();
         var app = builder.Build();
@@ -36,11 +42,11 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
+        app.UseSerilogRequestLogging();
+        app.UseHealthChecks("/Health");
         app.UseHttpsRedirection();
         app.UseCustomExceptionHandler();
         app.UseAuthorization();
-
 
         app.MapControllers();
 

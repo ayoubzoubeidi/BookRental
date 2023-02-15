@@ -20,7 +20,6 @@
   <ItemGroup>
     <Folder Include="Books\Queries\" />
     <Folder Include="Customers\Commands\DeleteCustomer\" />
-    <Folder Include="Customers\Commands\UpdateCustomer\" />
   </ItemGroup>
 
 </Project>

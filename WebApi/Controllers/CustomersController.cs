@@ -1,5 +1,6 @@
 ﻿using Application.Customers.Commands.CreateCustomer;
 using Application.Customers.Commands.Rental;
+using Application.Customers.Commands.UpdateCustomer;
 using Application.Customers.Queries.GetCustomerDetail;
 using Application.Customers.Queries.GetCustomersList;
 using MediatR;
@@ -47,6 +48,16 @@ public class CustomersController : ControllerBase
         return Ok(customer);
     }
 
+    [HttpPut]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateCustomer(Guid customerId, [FromBody] UpdateCustomerCommand updateCustomerCommand)
+    {
+        updateCustomerCommand.Id = customerId;
+        await _mediator.Send(updateCustomerCommand);
+        return NoContent();
+    }
+
     [HttpPut("AddRental")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesDefaultResponseType]
@@ -55,4 +66,5 @@ public class CustomersController : ControllerBase
         await _mediator.Send(rentBookCommand);
         return NoContent();
     }
+
 }

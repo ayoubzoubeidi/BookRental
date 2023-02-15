@@ -16,10 +16,10 @@ public static class DependencyInjection
     {
         services.AddTransient<IDateTime, MachineDateTime>();
 
-        services.AddDbContext<BookRentalDbContext>(options =>
+        services.AddDbContextPool<BookRentalDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("Default")));
 
-        services.AddScoped<IBookRentalDbContext>(provider => provider.GetService<BookRentalDbContext>());
+        services.AddSingleton<IBookRentalDbContext, BookRentalDbContext>();
 
         return services;
     }

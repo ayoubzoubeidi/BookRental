@@ -31,9 +31,8 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-        builder.Services.AddHealthChecks();
-        builder.Services.AddPersistence(configuration);
         builder.Services.AddApplication();
+        builder.Services.AddPersistence(configuration);
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -43,7 +42,6 @@ public class Program
             app.UseSwaggerUI();
         }
         app.UseSerilogRequestLogging();
-        app.UseHealthChecks("/Health");
         app.UseHttpsRedirection();
         app.UseCustomExceptionHandler();
         app.UseAuthorization();

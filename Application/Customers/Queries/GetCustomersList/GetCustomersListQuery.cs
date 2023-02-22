@@ -33,6 +33,7 @@ public class Handler : IRequestHandler<GetCustomersListQuery, CustomerPage>
             .AsNoTracking()
             .OrderBy(x => x.Id)
             .Skip(request.PageNumber * request.PageSize)
+            .Take(request.PageSize)
             .Select(c => (CustomerDetailVue)c).ToListAsync());
     }
 }

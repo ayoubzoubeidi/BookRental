@@ -5,6 +5,7 @@ using Application.Customers.Queries.GetCustomerDetail;
 using Application.Customers.Queries.GetCustomersList;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace WebApi.Controllers;
 
@@ -14,10 +15,12 @@ public class CustomersController : ControllerBase
 {
 
     private IMediator _mediator;
+    Serilog.ILogger _logger;
 
-    public CustomersController(IMediator mediator)
+    public CustomersController(IMediator mediator, Serilog.ILogger logger)
     {
         _mediator = mediator;
+        _logger = logger;
     }
 
     [HttpPost]
